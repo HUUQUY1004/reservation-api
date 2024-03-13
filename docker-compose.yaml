@@ -1,0 +1,16 @@
+version: '1.0'
+services:
+  project-nest:
+    image: postgres:15.0
+    container_name: project-nest
+    ports:
+     - "5434:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Abc123456789
+      POSTGRES_DB: project-nest
+    networks:
+      - nest-networks
+
+networks:
+  nest-networks:

@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User{
+  id Int @id @default(autoincrement())
+  email String  @unique
+  username String
+  isAdmin Boolean @default(false) 
+  hashedPassword  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationship
+  tickets Ticket[]
+
+
+  @@map("users")
+}
+
+model TradeMark {
+  id Int @id @default(autoincrement())
+  name String 
+  description String
+  numChair Int @default(0)
+  Vehicles Vehicle[]
+
+  @@map("TradeMark")
+}
+
+model Vehicle {
+  id Int @id @default(autoincrement())
+  licensePlate String
+  time String
+  date DateTime
+  departure_location String
+  destination String
+  tickets  Ticket[]
+  TradeId Int
+  trade TradeMark @relation(fields: [TradeId] , references: [id])
+
+  @@map("Vehicles")
+
+}
+
+model Ticket {
+  id Int @id @default(autoincrement())
+  chair String
+  name String
+  price Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId Int
+  vehicleId Int
+  isBougth Boolean @default(false)
+// Relationship 
+  user User @relation(fields: [userId], references: [id])
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  @@map("Tickets")
+
+}
+
+model CT_Ticket{
+  id Int @id @default(autoincrement())
+  departure_time DateTime
+  departure_location String
+  destination String
+  ticketId Int
+}
